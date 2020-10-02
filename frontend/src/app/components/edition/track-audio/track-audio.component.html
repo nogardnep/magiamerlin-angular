@@ -1,0 +1,16 @@
+<h3>Audio</h3>
+<button (click)="onClickLoadSound()">Load sound</button>
+<div *ngIf="track.audio.resource">
+  <figure>
+    <figcaption>{{ track.audio.resource.path | filename }}</figcaption>
+    <audio controls [src]="getAudioSrc()">
+      Your browser does not support the
+      <code>audio</code> element.
+    </audio>
+  </figure>
+  <button (click)="onClickEmptySound()">Empty sound</button>
+</div>
+<div>
+  <label for="voices">Voices</label>
+  <input id="voices" type="number" min="0" max="10" [(ngModel)]="track.audio.parameters.voices">
+</div>

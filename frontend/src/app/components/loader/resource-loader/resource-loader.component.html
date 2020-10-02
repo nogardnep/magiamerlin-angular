@@ -1,0 +1,19 @@
+<div>
+  <div>
+    <label for="local">Local</label>
+    <input id="local" type="checkbox" [(ngModel)]="local" (change)="onChangeLocal()" />
+  </div>
+  <ul>
+    <li *ngFor="let resource of resources">
+      <button (click)="onClickResource(resource)">
+        <span>{{ resource.path }}</span>
+        <span *ngIf="isFocused(resource)">*</span>
+      </button>
+    </li>
+  </ul>
+  <button (click)="onClickLoad()">Load</button>
+  <button (click)="onClickCancel()">Cancel</button>
+</div>
+<div *ngIf="focusedResource !== null">
+  <div>{{ focusedResource.path | filename }}</div>
+</div>

@@ -1,0 +1,8 @@
+<ul>
+  <li *ngFor="let track of tracks; let i = index">
+    <button (click)="onClickTrack(track)">
+      <span>{{ track.number+1 }}</span>
+      <span *ngIf="isSelected(track)">*</span>
+    </button>
+  </li>
+</ul>

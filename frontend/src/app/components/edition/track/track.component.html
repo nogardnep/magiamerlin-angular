@@ -1,0 +1,10 @@
+<h2>Track {{ track.num }}</h2>
+
+<div>
+  <label for="name">Name</label>
+  <input id="name" type="text" [(ngModel)]="track.name">
+</div>
+
+<app-track-audio [track]="track"></app-track-audio>
+<app-track-video [track]="track"></app-track-video>
+<app-track-midi [track]="track"></app-track-midi>

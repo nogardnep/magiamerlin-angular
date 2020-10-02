@@ -1,0 +1,9 @@
+<h2>Song parts</h2>
+<div>
+  <button *ngFor="let songPart of getSongParts()" (click)="onClickSongPart(songPart)">
+    <span>{{ songPart.num }}.</span>
+    <span *ngIf="songPart.name">{{ songPart.name }}</span>
+  </button>
+</div>
+
+<app-song-part *ngIf="selectedSongPart !== null" [songPart]="selectedSongPart"></app-song-part>

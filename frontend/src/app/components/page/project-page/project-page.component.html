@@ -1,0 +1,6 @@
+<app-projects-control></app-projects-control>
+<app-selection-control></app-selection-control>
+<app-sequencer></app-sequencer>
+<div *ngIf="selectedProject !== null">
+  <app-project [project]="selectedProject"></app-project>
+</div>

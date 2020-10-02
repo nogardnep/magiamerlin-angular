@@ -1,0 +1,8 @@
+<ul>
+  <li *ngFor="let pattern of patterns; let i = index">
+    <button (click)="onClickPattern(pattern)">
+      <span>{{ i+1 }}</span>
+      <span *ngIf="isSelected(pattern)">*</span>
+    </button>
+  </li>
+</ul>

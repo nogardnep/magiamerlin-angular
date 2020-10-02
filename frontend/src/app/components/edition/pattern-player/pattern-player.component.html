@@ -1,0 +1,8 @@
+<h2>Patterns</h2>
+<div>
+  <button *ngFor="let pattern of getPatterns()" (click)="onClickPattern(pattern)">
+    <span>{{ pattern.num}}.</span>
+    <span *ngIf="pattern.name">{{ pattern.name}}.</span>
+  </button>
+</div>
+<app-sequence [sequence]="sequence"></app-sequence>

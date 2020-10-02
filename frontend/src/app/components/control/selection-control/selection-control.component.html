@@ -1,0 +1,29 @@
+<h2>Control </h2>
+<div>
+  <span>
+    <span>Sequence:</span>
+    <input type="number" [min]="getMin()" [max]="getMax(configuration.sequenceNumber)" [ngModel]="sequenceNum"
+      (change)="onChangeSequenceNum($event.target.value)" />
+  </span>
+  <span>
+    <span>Pattern</span>
+    <input type="number" [min]="getMin()" [max]="getMax(configuration.patternNumber)" [ngModel]="patternNum"
+      (change)="onChangePatternNum($event.target.value)" />
+  </span>
+  <span>
+    <span>Track</span>
+    <input type="number" [min]="getMin()" [max]="getMax(configuration.trackNumber)" [ngModel]="trackNum" (change)="onChangeTrackNum($event.target.value)" />
+  </span>
+  <span>
+    <span>Bank</span>
+    <input type="number" [min]="getMin()" [max]="getMax(configuration.bankNumber)" [ngModel]="bankNum" (change)="onChangeBankNum($event.target.value)" />
+  </span>
+</div>
+<div>
+  <span *ngFor="let mode of getModes()">
+    <button (click)="onClickMode(mode)">
+      <span>{{ mode.name }}</span>
+      <span *ngIf="modeIsSelected(mode);">*</span>
+    </button>
+  </span>
+</div>

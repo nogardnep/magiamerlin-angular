@@ -1,0 +1,12 @@
+<h3>Video</h3>
+<button (click)="onClickLoadVideo()">Load video</button>
+<div *ngIf="track.video.resource">
+  <figure>
+    <figcaption>{{ track.video.resource.path | filename }}</figcaption>
+    <video controls [src]="getVideoSrc()">
+      Your browser does not support the
+      <code>video</code> element.
+    </video>
+  </figure>
+  <button (click)="onClickEmptyVideo()">Empty video</button>
+</div>

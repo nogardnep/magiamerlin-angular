@@ -1,0 +1,10 @@
+<ul>
+  <li *ngFor="let project of projects">
+    <button (click)="onClickProject(project)">
+      <span>{{ project.name }}</span>
+      <span *ngIf="isFocused(project)">*</span>
+    </button>
+  </li>
+</ul>
+<button (click)="onClickLoad()">Load</button>
+<button (click)="onClickCancel()">Cancel</button>

@@ -1,0 +1,24 @@
+<h2>Presets</h2>
+<ul>
+  <li *ngFor="let preset of presets">
+    <button (click)="onClickPreset(preset)">
+      <span>{{ preset.name }}</span>
+      <span *ngIf="isFocused(preset)">*</span>
+    </button>
+  </li>
+</ul>
+<div *ngIf="focusedPreset !== null">
+  <div>{{ focusedPreset.name }}</div>
+  <ul>
+    <li *ngFor="let track of focusedPreset.tracks">
+      <span>{{ track.num }}:</span>
+      <span *ngIf="track.audio.resource">{{ track.audio.resource.path }}</span>
+    </li>
+  </ul>
+  <button (click)="onClickDelete(focusedPreset)">Delete</button>
+</div>
+<div>
+    <button [disabled]="focusedPreset === null" (click)="onClickLoad()">Load</button>
+    <button [disabled]="focusedPreset === null" (click)="onClickSave()">Save</button>
+  <button (click)="onClickCancel()">Cancel</button>
+</div>

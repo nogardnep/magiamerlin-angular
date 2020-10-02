@@ -1,0 +1,11 @@
+"use strict";
+var express = require("express");
+var router = express.Router();
+var controller = require("../controllers/track-preset.controller");
+router.get("/", controller.getAll);
+router.get("/:id", controller.getOne);
+router.post("/", controller.createOne);
+router.put("/", controller.updateAll);
+router.put("/:id", controller.updateOne);
+router.delete("/:id", controller.deleteOne);
+module.exports = router;

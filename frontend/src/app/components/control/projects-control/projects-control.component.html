@@ -1,0 +1,10 @@
+<div>
+  <button (click)="onClickCreateProject()">Create</button>
+  <button (click)="onClickLoadProject()">Load</button>
+  <span *ngIf="project !== null">
+    <button (click)="onClickSaveProject()">Save</button>
+    <button (click)="onClickDeleteProject()">Delete</button>
+  </span>
+</div>
+<button (click)="onClickConfiguration()">Configuration</button>
+
