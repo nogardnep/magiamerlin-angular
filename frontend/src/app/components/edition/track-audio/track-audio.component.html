@@ -10,7 +10,4 @@
   </figure>
   <button (click)="onClickEmptySound()">Empty sound</button>
 </div>
-<div>
-  <label for="voices">Voices</label>
-  <input id="voices" type="number" min="0" max="10" [(ngModel)]="track.audio.parameters.voices">
-</div>
+<app-parameters-editor [entity]="track.audio" [parametersModel]="getParametersModel()"></app-parameters-editor>

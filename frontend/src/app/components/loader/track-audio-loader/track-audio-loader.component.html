@@ -1,1 +1,12 @@
-<app-resource-loader [target]="track.audio.resource" [type]="type" (loaded)="onLoaded($event)"></app-resource-loader>
+<app-resource-loader [target]="track.audio.resource" [type]="type" (loaded)="onLoaded($event)"
+  (focused)="onFocused($event)"></app-resource-loader>
+
+<div *ngIf="focusedResource !== null">
+  <figure>
+    <figcaption>{{ focusedResource.path | filename }}</figcaption>
+    <audio controls [src]="getAudioSrc()">
+      Your browser does not support the
+      <code>audio</code> element.
+    </audio>
+  </figure>
+</div>

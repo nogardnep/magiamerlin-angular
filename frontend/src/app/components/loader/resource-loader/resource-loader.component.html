@@ -1,4 +1,5 @@
-<div>
+<div *ng></div>
+<div *ngIf="!loading; else isLoading">
   <div>
     <label for="local">Local</label>
     <input id="local" type="checkbox" [(ngModel)]="local" (change)="onChangeLocal()" />
@@ -11,9 +12,10 @@
       </button>
     </li>
   </ul>
-  <button (click)="onClickLoad()">Load</button>
-  <button (click)="onClickCancel()">Cancel</button>
+  <button (click)="onClickLoad()" [disabled]="focusedResource === null">Load</button>
 </div>
-<div *ngIf="focusedResource !== null">
-  <div>{{ focusedResource.path | filename }}</div>
-</div>
+<button (click)="onClickCancel()">Cancel</button>
+
+<ng-template #isLoading>
+  <app-loading></app-loading>
+</ng-template>

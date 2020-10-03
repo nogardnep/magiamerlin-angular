@@ -85,10 +85,7 @@ export class ProjectsManagerService {
           step: 4,
           beat: 4,
           mesure: 1,
-        } as TimeSignature,
-        parameters: {
-          bpm: 120,
-        },
+        } as TimeSignature
       } as Sequence;
 
       sequences.push(newSequence);
@@ -133,15 +130,10 @@ export class ProjectsManagerService {
           num,
           bank,
           audio: {
-            resource: null,
-            parameters: {
-              voices: 0,
-            },
+            resource: null
           } as TrackAudio,
           video: {
-            resource: null,
-            parameters: {
-            },
+            resource: null
           } as TrackVideo,
         } as Track;
 

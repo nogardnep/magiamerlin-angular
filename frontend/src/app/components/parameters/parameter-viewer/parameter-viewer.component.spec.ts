@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ParameterComponent } from './parameter.component';
+import { ParameterViewerComponent } from './parameter-viewer.component';
 
-describe('ParameterComponent', () => {
-  let component: ParameterComponent;
-  let fixture: ComponentFixture<ParameterComponent>;
+describe('ParameterViewerComponent', () => {
+  let component: ParameterViewerComponent;
+  let fixture: ComponentFixture<ParameterViewerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ParameterComponent ]
+      declarations: [ ParameterViewerComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ParameterComponent);
+    fixture = TestBed.createComponent(ParameterViewerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

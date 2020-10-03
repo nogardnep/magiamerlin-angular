@@ -1,13 +1,15 @@
-import { ResourcesDataService } from 'src/app/services/data/resources-data.service';
-import { AudioSamplerService } from 'src/app/services/sampler/audio-sampler.service';
+import { ParametersModel } from 'src/app/models/Parameter';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Track } from 'src/app/models/entity/Track.model';
-import { Component, Input, OnInit } from '@angular/core';
+import { trackAudioParametersModel } from 'src/app/models/entity/TrackAudio.model';
+import { ResourcesDataService } from 'src/app/services/data/resources-data.service';
+import { AudioSamplerService } from 'src/app/services/sampler/audio-sampler.service';
 
 @Component({
   selector: 'app-track-audio',
   templateUrl: './track-audio.component.html',
-  styleUrls: ['./track-audio.component.scss']
+  styleUrls: ['./track-audio.component.scss'],
 })
 export class TrackAudioComponent {
   @Input() track: Track;
@@ -15,7 +17,8 @@ export class TrackAudioComponent {
   constructor(
     private router: Router,
     private audioSamplerService: AudioSamplerService,
-    private resourcesService: ResourcesDataService) { }
+    private resourcesService: ResourcesDataService
+  ) {}
 
   onClickLoadSound(): void {
     this.router.navigate(['/track-audio-loader']); // TODO: do not use string
@@ -30,4 +33,7 @@ export class TrackAudioComponent {
     return this.resourcesService.getSrc(this.track.audio.resource);
   }
 
+  getParametersModel(): ParametersModel {
+    return trackAudioParametersModel;
+  }
 }

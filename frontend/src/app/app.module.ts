@@ -24,7 +24,6 @@ import { SequenceListComponent } from './components/list/sequence-list/sequence-
 import { SequencerComponent } from './components/sequencer/sequencer.component';
 import { TrackListComponent } from './components/list/track-list/track-list.component';
 import { TrackAudioLoaderPageComponent } from './components/page/track-audio-loader-page/track-audio-loader-page.component';
-import { ParameterComponent } from './components/utils/parameter/parameter.component';
 import { TimeSignatureComponent } from './components/utils/time-signature/time-signature.component';
 import { appRoutes } from './routerConfig';
 import { TracksPresetExplorerComponent } from './components/page/tracks-preset-explorer/tracks-preset-explorer.component';
@@ -42,6 +41,9 @@ import { TrackVideoComponent } from './components/edition/track-video/track-vide
 import { TrackVideoLoaderComponent } from './components/loader/track-video-loader/track-video-loader.component';
 import { TrackMidiComponent } from './components/edition/track-midi/track-midi.component';
 import { TrackVideoLoaderPageComponent } from './components/page/track-video-loader-page/track-video-loader-page.component';
+import { ParametersEditorComponent } from './components/parameters/parameters-editor/parameters-editor.component';
+import { ParameterEditorComponent } from './components/parameters/parameter-editor/parameter-editor.component';
+import { ParameterViewerComponent } from './components/parameters/parameter-viewer/parameter-viewer.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +58,7 @@ import { TrackVideoLoaderPageComponent } from './components/page/track-video-loa
     TrackListComponent,
     SelectionControlComponent,
     SequencerComponent,
-    ParameterComponent,
+    ParameterEditorComponent,
     PatternMesureComponent,
     PatternBeatComponent,
     PatternStepComponent,
@@ -84,6 +86,8 @@ import { TrackVideoLoaderPageComponent } from './components/page/track-video-loa
     TrackVideoLoaderComponent,
     TrackMidiComponent,
     TrackVideoLoaderPageComponent,
+    ParametersEditorComponent,
+    ParameterViewerComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
