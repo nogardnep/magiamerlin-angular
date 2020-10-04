@@ -1,5 +1,10 @@
 import { Entity } from 'src/app/models/entity/Entity.model';
-import { ParameterModel, ParameterLabel, ParametersModel } from 'src/app/models/Parameter';
+import {
+  ParameterModel,
+  ParameterLabel,
+  ParametersModel,
+  ParameterValue,
+} from 'src/app/models/Parameter';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -7,6 +12,8 @@ import { Injectable } from '@angular/core';
 })
 export class ParametersService {
   constructor() {}
+
+  // TODO: do not use string as keys
 
   checkParameter(
     entity: Entity,
@@ -20,6 +27,16 @@ export class ParametersService {
     if (entity.parameters[key] === undefined) {
       entity.parameters[key] = parametersModel[key].default;
     }
+  }
+
+  getParameter(
+    entity: Entity,
+    parametersModel: ParametersModel,
+    key: string
+  ): ParameterValue {
+    // TODO: do not use string for key (possible?)
+    this.checkParameter(entity, parametersModel, key);
+    return entity.parameters[key];
   }
 
   getLabelFor(value: number, parameterModel: ParameterModel): ParameterLabel {

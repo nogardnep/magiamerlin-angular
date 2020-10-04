@@ -1,0 +1,8 @@
+<h2>Patterns</h2>
+<div>
+  <span *ngFor="let pattern of getPatterns()">
+    <app-pattern-player-trigger [pattern]="pattern"></app-pattern-player-trigger>
+  </span>
+
+</div>
+<app-sequence [sequence]="sequence"></app-sequence>

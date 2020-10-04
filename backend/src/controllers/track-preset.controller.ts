@@ -1,8 +1,7 @@
-import { NextFunction } from "express";
-import { Response } from "express";
-import { Request } from "express";
-import { PathManager } from "../util/path-manager";
-const fs = require("fs");
+import { PathManager } from "./../util/path-manager";
+import { LogType, LogManager } from "./../util/log-manager";
+import { NextFunction, Request, Response } from "express";
+const fs = require("fs-extra");
 const del = require("del");
 const apiConfig = require("../config/api.config");
 
@@ -12,31 +11,42 @@ interface TrackPreset {
 
 export class TrackPresetController {
   static getAll(req: Request, res: Response, next: NextFunction): void {
-    fs.readdir(apiConfig.presetsPath, (error: any, items: string[]) => {
-      if (error) {
-        res.status(400).json({
-          error,
-        });
-      } else {
-        const presets: TrackPreset[] = [];
+    // const dir = PathManager.getTrackPresetsPath();
 
-        items.forEach((item: string) => {
-          if (fs.existsSync(PathManager.getPresetDataFilePath(item))) {
-            presets.push(
-              JSON.parse(
-                fs.readFileSync(PathManager.getPresetDataFilePath(item))
-              )
-            );
-          } else {
-            console.error("Unfound data for preset " + item);
-          }
-        });
+    // fs.ensureDir(dir)
+    //   .then(() => {
+    //     const presets: TrackPreset[] = [];
 
-        console.log(presets);
+    //     fs.readdir(dir).then((items: string[]) => {
+    //       items.forEach((item: string) => {
+    //         const path = PathManager.getTrackPresetDataFilePath(item);
 
-        res.status(201).json(presets);
-      }
-    });
+    //         if (fs.existsSync(path)) {
+    //           const data = await fs.readJson('./package.json');              
+    //           presets.push(JSON.parse(fs.readFileSync(path)));
+    //         } else {
+    //           const message = "Unfound data for preset " + item;
+
+    //           LogManager.log(LogType.Error, message);
+
+    //           res.status(400).json({
+    //             message,
+    //           });
+    //         }
+    //       });
+
+    //       console.log(presets);
+
+    //       res.status(201).json(presets);
+    //     });
+    //   })
+    //   .catch((error: string) => {
+    //     LogManager.log(LogType.Error, error);
+
+    //     res.status(400).json({
+    //       message: error,
+    //     });
+    //   });
   }
 
   static getOne(req: Request, res: Response, next: NextFunction): void {
@@ -44,60 +54,55 @@ export class TrackPresetController {
   }
 
   static createOne(req: Request, res: Response, next: NextFunction): void {
-    const preset = req.body;
-
-    fs.access(PathManager.getPresetFolderPath(preset.name), (error: any) => {
-      if (!error) {
-        const message = "preset " + preset.name + " already exists";
-        console.error(message);
-        res.status(400).json({
-          error: message,
-        });
-      } else {
-        fs.mkdirSync(PathManager.getPresetFolderPath(preset.name));
-        TrackPresetController.storePreset(preset);
-        res.status(201).json(preset);
-      }
-    });
+    // const preset = req.body;
+    // fs.access(PathManager.getTrackPresetFolderPath(preset.name), (error: any) => {
+    //   if (!error) {
+    //     const message = "preset " + preset.name + " already exists";
+    //     console.error(message);
+    //     res.status(400).json({
+    //       error: message,
+    //     });
+    //   } else {
+    //     fs.mkdirSync(PathManager.getTrackPresetFolderPath(preset.name));
+    //     TrackPresetController.storePreset(preset);
+    //     res.status(201).json(preset);
+    //   }
+    // });
   }
 
   static updateOne(req: Request, res: Response, next: NextFunction): void {
-    const preset = req.body;
-
-    fs.access(PathManager.getPresetFolderPath(preset.name), (error: any) => {
-      if (error) {
-        const message = "preset " + preset.name + " doesn't exist";
-        console.error(message);
-        res.status(400).json({
-          error: message,
-        });
-      } else {
-        TrackPresetController.storePreset(preset);
-        res.status(201).json(preset);
-      }
-    });
+    // const preset = req.body;
+    // fs.access(PathManager.getTrackPresetFolderPath(preset.name), (error: any) => {
+    //   if (error) {
+    //     const message = "preset " + preset.name + " doesn't exist";
+    //     console.error(message);
+    //     res.status(400).json({
+    //       error: message,
+    //     });
+    //   } else {
+    //     TrackPresetController.storePreset(preset);
+    //     res.status(201).json(preset);
+    //   }
+    // });
   }
 
   static deleteOne(req: Request, res: Response, next: NextFunction): void {
-    const name = req.params.name;
-
-    const dir = PathManager.getPresetFolderPath(name);
-
-    (async () => {
-      try {
-        await del(dir);
-
-        res.status(200).json({ message: "entity deleted" });
-      } catch (error) {
-        (error: any) => res.status(400).json({ error });
-      }
-    })();
+    // const name = req.params.name;
+    // const dir = PathManager.getTrackPresetFolderPath(name);
+    // (async () => {
+    //   try {
+    //     await del(dir);
+    //     res.status(200).json({ message: "entity deleted" });
+    //   } catch (error) {
+    //     (error: any) => res.status(400).json({ error });
+    //   }
+    // })();
   }
 
   private static storePreset(preset: TrackPreset) {
-    fs.writeFileSync(
-      PathManager.getPresetDataFilePath(preset.name),
-      JSON.stringify(preset, null, 2)
-    );
+    // fs.writeFileSync(
+    //   PathManager.getTrackPresetDataFilePath(preset.name),
+    //   JSON.stringify(preset, null, 2)
+    // );
   }
 }

@@ -6,6 +6,6 @@ export interface Position extends Entity {
   mesure: number;
   beat: number;
   tick: number;
-  currentTurn: number;
-  maximumTurn: number;
+  turn: number;
+  maxTurn: number;
 }

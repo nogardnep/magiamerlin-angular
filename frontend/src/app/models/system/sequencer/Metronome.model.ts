@@ -1,5 +1,3 @@
-import { TimeoutError } from 'rxjs';
-
 export class Metronome {
   private interval: number;
   private timer: any; // TODO
@@ -7,28 +5,33 @@ export class Metronome {
   private action: () => void;
   private playing: boolean;
 
-  constructor(interval = 500, action: () => void) {
+  constructor(interval: number, action: () => void) {
     this.action = action;
     this.interval = interval;
+
+    this.init();
+  }
+
+  init(): void {
+    this.playing = false;
+    this.counter = 0;
   }
 
   start(): void {
     if (!this.playing) {
       this.playing = true;
       stop();
-      this.tick();
+      this.timer = setInterval(() => {
+        this.tick();
+      }, this.interval);
     }
   }
 
   stop(): void {
     if (this.playing) {
-      this.playing = false;
-      this.counter = 0;
+      this.init();
 
-      if (this.timer) {
-        clearTimeout(this.timer);
-        this.timer = null;
-      }
+      clearInterval(this.timer);
     }
   }
 
@@ -39,9 +42,5 @@ export class Metronome {
   private tick(): void {
     this.action();
     this.counter++;
-
-    this.timer = setTimeout(() => {
-      this.tick();
-    }, this.interval);
   }
 }

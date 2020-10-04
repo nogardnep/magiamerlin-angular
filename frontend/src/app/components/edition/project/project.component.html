@@ -1,8 +1,9 @@
 <h1>Project&nbsp;: {{ project.name }}</h1>
 
 <div>
-  <app-song-parts *ngIf="inMode(modeEnum.SongPart)" [songParts]="project.songParts" [selectedSongPart]="selectedSongPart">
-  </app-song-parts>
+  <app-song-part-player *ngIf="inMode(modeEnum.SongPart)" [songParts]="project.songParts"
+    [selectedSongPart]="selectedSongPart">
+  </app-song-part-player>
   <app-sequence *ngIf="selectedSequence !== null && inMode(modeEnum.SequenceEdit)" [sequence]="selectedSequence">
   </app-sequence>
   <app-pattern *ngIf="selectedPattern !== null && inMode(modeEnum.PatternEdit)" [pattern]="selectedPattern">
@@ -11,5 +12,6 @@
   </app-track>
   <app-pattern-player *ngIf="inMode(modeEnum.PatternPlay)" [patterns]="project.patterns" [sequence]="selectedSequence">
   </app-pattern-player>
-  <app-audio-sampler *ngIf="inMode(modeEnum.TrackPlay)" [tracks]="project.tracks"></app-audio-sampler>
+  <app-track-player *ngIf="inMode(modeEnum.TrackPlay)" [tracks]="project.tracks"></app-track-player>
+  <app-sequence-player *ngIf="inMode(modeEnum.SequencePlay)" [sequences]="project.sequences"></app-sequence-player>
 </div>

@@ -1,0 +1,7 @@
+<h2>Sequences</h2>
+<div>
+  <button *ngFor="let sequence of getSequences()" (click)="onClickSequence(sequence)">
+    <span>{{ sequence.num}}.</span>
+    <span *ngIf="sequence.name">{{ sequence.name}}.</span>
+  </button>
+</div>

@@ -1,3 +1,4 @@
+import { Project } from 'src/app/models/entity/Project.model';
 import { SelectionService } from 'src/app/services/control/selection.service';
 import { ResourceType, Resource } from 'src/app/models/entity/Resource.model';
 import { HttpClient } from '@angular/common/http';
@@ -8,11 +9,16 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ResourcesDataService {
+  private project: Project;
+
   constructor(
     private httpClient: HttpClient,
-    private serverService: ServerService,
-    private selectionService: SelectionService
+    private serverService: ServerService
   ) {}
+
+  setCurrentProject(project: Project): void {
+    this.project = project;
+  }
 
   loadResources(
     type?: ResourceType,
@@ -21,7 +27,7 @@ export class ResourcesDataService {
     let url = this.serverService.getRootForResources();
 
     if (local) {
-      url += '/local/' + this.selectionService.getSelectedProject().name;
+      url += '/local/' + this.project.name;
     } else {
       url += '/global';
     }
@@ -51,7 +57,7 @@ export class ResourcesDataService {
     let url = this.serverService.getRootForResources();
 
     if (resource.local !== undefined && resource.local) {
-      url += '/local/' + this.selectionService.getSelectedProject().name;
+      url += '/local/' + this.project.name;
     } else {
       url += '/global';
     }

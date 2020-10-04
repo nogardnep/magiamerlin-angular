@@ -1,23 +1,26 @@
+import { ParameterValue } from 'src/app/models/Parameter';
+import { ParametersService } from 'src/app/services/parameters/parameters.service';
+import { ResourcesDataService } from 'src/app/services/data/resources-data.service';
+import { configuration } from 'src/app/config/config';
 import { Injectable } from '@angular/core';
 import { Howl, Howler } from 'howler';
 import { Resource } from 'src/app/models/entity/Resource.model';
 import { Track } from 'src/app/models/entity/Track.model';
-import { Audio as SamplerAudio } from 'src/app/models/system/audio/Audio.model';
-import { TrackAudio as EntityAudio } from 'src/app/models/entity/TrackAudio.model';
+import { SamplerVoice } from 'src/app/models/system/audio/SamplerVoice.model';
+import {
+  TrackAudio,
+  trackAudioParametersModel,
+  Chunk,
+  TrackAudioParametersIndex,
+} from 'src/app/models/entity/TrackAudio.model';
 
 // import { Audio } from 'src/app/models/entity/Audio.model';
 
-type Sound = {
-  // audio: Audio;
-  sound: Howl;
-  id: number;
-  playing: boolean;
-};
-
 export type SamplerTrack = {
   id: string;
-  entity: EntityAudio;
-  sounds: Sound[];
+  track: Track;
+  voices: SamplerVoice[];
+  lastPlayedVoiceIndex: number;
 };
 
 @Injectable({
@@ -27,56 +30,130 @@ export class AudioSamplerService {
   private masterVolume: number;
   private samplerTracks: SamplerTrack[];
 
-  constructor() {
+  constructor(
+    private resourcesDataService: ResourcesDataService,
+    private parametersService: ParametersService
+  ) {
     this.setMasterVolume(1);
 
     this.samplerTracks = [];
 
-    for (let i = 0; i < 16; i++) {
-      const samplerTrack = {
-        id: i.toString(),
-        entity: null,
-        sounds: [],
+    for (
+      let num = configuration.entities.firstNum;
+      num <= configuration.entities.trackNumber;
+      num++
+    ) {
+      const samplerTrack: SamplerTrack = {
+        id: num.toString(),
+        track: null,
+        voices: [],
+        lastPlayedVoiceIndex: null,
       };
 
       this.samplerTracks.push(samplerTrack);
     }
   }
 
-  initTracks(tracks: Track[]): void {
+  initSamplerTracks(tracks: Track[]): void {
     tracks.forEach((track: Track) => {
-      this.updateTrack(track);
+      this.updateSamplerTrack(track);
     });
   }
 
-  updateTrack(track: Track): void {
+  updateSamplerTrack(track: Track): void {
     if (track.audio && track.audio.resource) {
-      this.samplerTracks[track.num].entity = track.audio;
+      const samplerTrack = this.getSamplerTrack(track.num.toString());
+
+      samplerTrack.track = track;
+      samplerTrack.lastPlayedVoiceIndex = null;
+
+      const sounds = [];
+      const voicesNumber = this.getParameterFor(
+        samplerTrack.track.audio,
+        TrackAudioParametersIndex.Voices
+      );
+
+      for (let index = 0; index < voicesNumber; index++) {
+        const src = this.resourcesDataService.getSrc(
+          samplerTrack.track.audio.resource
+        );
+        const attack = this.getParameterFor(
+          samplerTrack.track.audio,
+          TrackAudioParametersIndex.Attack
+        );
+        const release = this.getParameterFor(
+          samplerTrack.track.audio,
+          TrackAudioParametersIndex.Release
+        );
+
+        sounds.push(
+          new SamplerVoice(src, {
+            attack,
+            release,
+          })
+        );
+      }
+
+      samplerTrack.voices = sounds;
     }
   }
 
-  playTrack(num: number): void {
-    const samplerTrack = this.samplerTracks[num];
+  playSamplerTrack(num: number): void {
+    const samplerTrack = this.getSamplerTrack(num.toString());
 
-    if (samplerTrack.entity !== null) {
-      if (samplerTrack.entity.parameters.voices === 0) {
-        if (samplerTrack.sounds.length > 0) {
-          this.stopSoundsOnTrack(samplerTrack);
+    if (samplerTrack.track !== null) {
+      const chunk = this.getParameterFor(
+        samplerTrack.track.audio,
+        TrackAudioParametersIndex.Chunk
+      );
+      if (chunk !== Chunk.NoChunk) {
+        this.samplerTracks.forEach((otherSamplerTrack: SamplerTrack) => {
+          if (
+            samplerTrack.track.bank === otherSamplerTrack.track.bank &&
+            samplerTrack.track.num !== otherSamplerTrack.track.num
+          ) {
+            const otherChunk = this.getParameterFor(
+              otherSamplerTrack.track.audio,
+              TrackAudioParametersIndex.Chunk
+            );
+
+            if (chunk === otherChunk) {
+              this.stopSamplerTrack(otherSamplerTrack);
+            }
+          }
+        });
+      }
+
+      if (samplerTrack.voices.length > 0) {
+        // this.playOnSamplerTrack(samplerTrack);
+        let voiceIndex: number;
+
+        if (samplerTrack.lastPlayedVoiceIndex !== null) {
+          voiceIndex = samplerTrack.lastPlayedVoiceIndex + 1;
+
+          if (samplerTrack.voices[voiceIndex] === undefined) {
+            voiceIndex = 0;
+          }
+        } else {
+          voiceIndex = 0;
         }
-        this.playOnTrack(samplerTrack, false);
-      } else {
-        if (
-          samplerTrack.sounds.length <= samplerTrack.entity.parameters.voices
-        ) {
-          this.playOnTrack(samplerTrack, false);
-        }
+
+        samplerTrack.voices[voiceIndex].play();
+        samplerTrack.lastPlayedVoiceIndex = voiceIndex;
       }
     }
   }
 
-  getSoundPath(resource: Resource): string {
-    // TODO
-    return null;
+  stopAllSamplerTrack(): void {
+    this.samplerTracks.forEach((samplerTrack: SamplerTrack) => {
+      this.stopSamplerTrack(samplerTrack);
+    });
+  }
+
+  stopSamplerTrack(samplerTrack: SamplerTrack): void {
+    samplerTrack.voices.forEach((voice: SamplerVoice) => {
+      voice.stop();
+    });
   }
 
   getMasterVolume(): number {
@@ -88,7 +165,7 @@ export class AudioSamplerService {
     Howler.volume(volume);
   }
 
-  getTrack(id: string): SamplerTrack {
+  getSamplerTrack(id: string): SamplerTrack {
     let found: SamplerTrack = null;
 
     this.samplerTracks.forEach((track: SamplerTrack) => {
@@ -100,58 +177,14 @@ export class AudioSamplerService {
     return found;
   }
 
-  playOnTrack(samplerTrack: SamplerTrack, loop?: boolean): void {
-    const sound = new Howl({
-      src: [this.getSoundPath(samplerTrack.entity.resource)],
-      volume: 1,
-      loop: loop != null ? loop : false,
-      onend: (num: number) => {
-        if (!loop) {
-          samplerTrack.sounds.forEach((value: Sound, index: number) => {
-            if (value.id === num) {
-              samplerTrack.sounds.splice(index, 1);
-            }
-          });
-        }
-      },
-    });
-
-    const id = sound.play();
-    // sound.fade(0, 1, 100, id);
-    samplerTrack.sounds.push({
-      //audio , // TODO
-      sound,
-      id,
-      playing: true,
-    });
-  }
-
-  stopSoundsOnTrack(samplerTrack: SamplerTrack): void {
-    samplerTrack.sounds.forEach((item: Sound) => {
-      if (item.playing) {
-        item.playing = false;
-        item.sound.fade(1, 0, 100, item.id);
-      }
-    });
-  }
-
-  playSimpleAudio(audio: SamplerAudio): void {
-    const sound = new Howl({
-      src: this.makeSrc(audio),
-      volume: audio.getVolume(),
-      loop: false,
-    });
-
-    sound.play();
-  }
-
-  private makeSrc(audio: SamplerAudio): string[] {
-    const src = [];
-
-    audio.getExtensions().forEach((extension: string) => {
-      src.push(audio.getName() + '.' + extension);
-    });
-
-    return src;
+  private getParameterFor(
+    trackAudio: TrackAudio,
+    key: TrackAudioParametersIndex
+  ): ParameterValue {
+    return this.parametersService.getParameter(
+      trackAudio,
+      trackAudioParametersModel,
+      key
+    );
   }
 }

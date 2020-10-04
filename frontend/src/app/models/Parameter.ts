@@ -1,3 +1,5 @@
+export type ParameterValue = number;
+
 export type ParameterLabel = {
   text: string;
   value: ParameterValue;
@@ -18,5 +20,3 @@ export type ParametersModel = {
 export type Parameters = {
   [name: string]: ParameterValue;
 };
-
-export type ParameterValue = number;

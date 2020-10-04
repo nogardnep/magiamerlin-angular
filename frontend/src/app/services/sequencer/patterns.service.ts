@@ -9,7 +9,7 @@ import { PatternWrapper } from 'src/app/models/wrapper/PatternWrapper.model';
   providedIn: 'root',
 })
 export class PatternsService {
-  patternWrappers: PatternWrapper[];
+  private patternWrappers: PatternWrapper[];
 
   constructor() {
     this.patternWrappers = [];
@@ -19,6 +19,22 @@ export class PatternsService {
     patterns.forEach((pattern: Pattern) => {
       this.patternWrappers.push(new PatternWrapper(pattern));
     });
+  }
+
+  getPatternWrappers(): PatternWrapper[] {
+    return this.patternWrappers;
+  }
+
+  getPatternWrapper(pattern: Pattern): PatternWrapper {
+    let found: PatternWrapper = null;
+
+    this.patternWrappers.forEach((patternWrapper: PatternWrapper) => {
+      if (patternWrapper.isSameAs(pattern)) {
+        found = patternWrapper;
+      }
+    });
+
+    return found;
   }
 
   getPatternEvent(
@@ -47,7 +63,7 @@ export class PatternsService {
       },
       position,
       trackNum: track.num,
-      bankNum: track.bank
+      bankNum: track.bank,
     } as PatternEvent;
 
     pattern.events.push(newEvent);

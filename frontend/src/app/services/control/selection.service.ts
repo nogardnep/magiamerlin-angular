@@ -1,3 +1,5 @@
+import { ResourcesDataService } from 'src/app/services/data/resources-data.service';
+import { configuration } from 'src/app/config/config';
 import { SongPart } from 'src/app/models/entity/SongPart.model';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -7,8 +9,10 @@ import { Project } from 'src/app/models/entity/Project.model';
 import { Resource } from 'src/app/models/entity/Resource.model';
 import { Sequence } from 'src/app/models/entity/Sequence.model';
 import { Track } from 'src/app/models/entity/Track.model';
-import { ControlMode } from 'src/app/models/system/control/ControlMode.model';
-import { ConfigurationService } from 'src/app/services/configuration/configuration.service';
+import {
+  ControlMode,
+  ControlModeEnum,
+} from 'src/app/models/system/control/ControlMode.model';
 import { AudioSamplerService } from 'src/app/services/sampler/audio-sampler.service';
 import { PatternsService } from 'src/app/services/sequencer/patterns.service';
 
@@ -39,8 +43,13 @@ export class SelectionService {
   constructor(
     private audioSamplerService: AudioSamplerService,
     private patternsService: PatternsService,
-    private configurationService: ConfigurationService
+    private resourcesDataService: ResourcesDataService
   ) {}
+
+  inMode(mode: ControlModeEnum): boolean {
+    // TODO: ugly
+    return ControlModeEnum[this.getSelectedMode().type] === mode;
+  }
 
   selectProject(project: Project): void {
     this.unselectAll();
@@ -50,7 +59,8 @@ export class SelectionService {
     if (this.selectedProject !== null) {
       this.selectDefault();
 
-      this.audioSamplerService.initTracks(this.selectedProject.tracks);
+      this.resourcesDataService.setCurrentProject(project);
+      this.audioSamplerService.initSamplerTracks(this.selectedProject.tracks);
 
       this.patternsService.initPatterns(this.selectedProject.patterns);
     }
@@ -88,7 +98,7 @@ export class SelectionService {
       this.selectTrack(this.selectedProject.tracks[0]);
     }
 
-    this.selectBank(this.configurationService.getConfigurations().firstNum);
+    this.selectBank(configuration.entities.firstNum);
   }
 
   private unselectAll(): void {
@@ -162,7 +172,7 @@ export class SelectionService {
 
   setTrackSound(track: Track, resource: Resource): void {
     track.audio.resource = resource;
-    this.audioSamplerService.updateTrack(track);
+    this.audioSamplerService.updateSamplerTrack(track);
   }
 
   setTrackVideo(track: Track, resource: Resource): void {

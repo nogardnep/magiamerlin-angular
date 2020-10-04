@@ -26,7 +26,7 @@ export class TrackAudioComponent {
 
   onClickEmptySound(): void {
     this.track.audio.resource = null;
-    this.audioSamplerService.updateTrack(this.track);
+    this.audioSamplerService.updateSamplerTrack(this.track);
   }
 
   getAudioSrc(): string {
@@ -35,5 +35,9 @@ export class TrackAudioComponent {
 
   getParametersModel(): ParametersModel {
     return trackAudioParametersModel;
+  }
+
+  onParameterChanged(): void {
+    this.audioSamplerService.updateSamplerTrack(this.track);
   }
 }

@@ -1,23 +1,4 @@
 <h2>Pattern {{ pattern.num }}</h2>
-<app-time-signature [model]="pattern"></app-time-signature>
-
-<div *ngFor="let mesure of ' '.repeat(pattern.timeSignature.mesure).split(''), let mesureIndex = index">
-  <span><strong>{{ mesureIndex }}.</strong></span>
-  <span *ngFor="let beat of ' '.repeat(pattern.timeSignature.beat).split(''), let beatIndex = index">
-    {{ beatIndex }}
-    <span *ngFor="let step of ' '.repeat(pattern.timeSignature.step).split(''), let stepIndex = index">
-      <input type="checkbox" id="scales" name="scales"
-        [ngModel]="getEventState({mesure: mesureIndex, beat: beatIndex, tick: stepIndex})"
-        (change)="onChangeEvent({mesure: mesureIndex, beat: beatIndex, tick: stepIndex}, $event.target.checked)">
-        <span *ngIf="isCrossed({mesure: mesureIndex, beat: beatIndex, tick: stepIndex})">*</span>
-    </span>
-  </span>
-</div>
-<span *ngFor="let step of ' '.repeat(pattern.timeSignature.step).split(''), let stepIndex = index">
-</span>
-
-<div *ngIf="selectedEvent !== null">
-  <app-pattern-event [event]="selectedEvent"></app-pattern-event>
-</div>
-
-
+<app-time-signature [id]="'pattern' + '-' + pattern.num  + '-time-signature'" [model]="pattern"></app-time-signature>
+<app-parameters-editor [entity]="pattern" [parametersModel]="getParametersModel()"></app-parameters-editor>
+<app-pattern-sheet [pattern]="pattern"></app-pattern-sheet>

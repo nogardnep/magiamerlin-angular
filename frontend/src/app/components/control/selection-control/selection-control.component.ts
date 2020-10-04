@@ -1,7 +1,4 @@
-import {
-  configuration,
-  ConfigurationService,
-} from 'src/app/services/configuration/configuration.service';
+import { configuration } from 'src/app/config/config';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import {
@@ -23,23 +20,18 @@ export class SelectionControlComponent implements OnInit, OnDestroy {
   patternNum: number;
   trackNum: number;
   bankNum: number;
-  configuration: configuration;
+  configuration = configuration;
 
   private selectedSequenceSubscription: Subscription;
   private selectedPatternSubscription: Subscription;
   private selectedTrackSubscription: Subscription;
   private selectedBankSubscription: Subscription;
 
-  constructor(
-    private selectionService: SelectionService,
-    private configurationService: ConfigurationService
-  ) {
-    this.configuration = this.configurationService.getConfigurations();
-
-    this.sequenceNum = this.configuration.firstNum;
-    this.patternNum = this.configuration.firstNum;
-    this.trackNum = this.configuration.firstNum;
-    this.bankNum = this.configuration.firstNum;
+  constructor(private selectionService: SelectionService) {
+    this.sequenceNum = configuration.entities.firstNum;
+    this.patternNum = configuration.entities.firstNum;
+    this.trackNum = configuration.entities.firstNum;
+    this.bankNum = configuration.entities.firstNum;
   }
 
   ngOnInit(): void {
@@ -84,11 +76,11 @@ export class SelectionControlComponent implements OnInit, OnDestroy {
   }
 
   getMax(maxNumber: number): number {
-    return maxNumber - 1 + this.configuration.firstNum;
+    return maxNumber - 1 + configuration.entities.firstNum;
   }
 
   getMin(): number {
-    return this.configuration.firstNum;
+    return configuration.entities.firstNum;
   }
 
   onChangeSequenceNum(value: number): void {

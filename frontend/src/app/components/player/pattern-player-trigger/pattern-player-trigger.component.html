@@ -1,0 +1,10 @@
+<div>
+  <button (click)="onClickTrigger()">
+    <span>{{ pattern.num}}.</span>
+    <span *ngIf="pattern.name">{{ pattern.name }}.</span>
+    <span>{{ getButtonText() }}</span>
+  </button>
+  <div *ngIf="patternWrapper.isLooping()">looping</div>
+  <div *ngIf="patternWrapper.isArmedForStopping()">armed for stopping</div>
+  <div *ngIf="patternWrapper.isArmedForPlaying()">armed for playing</div>
+</div>

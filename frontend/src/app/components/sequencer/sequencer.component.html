@@ -1,21 +1,11 @@
 <h2>Sequencer</h2>
 <button (click)="onClickPlay()">Play</button>
 <button (click)="onClickPause()">Pause</button>
+<button (click)="onClickStop()">Stop</button>
+<button (click)="onClickBackward()">Backward</button>
+<button (click)="onClickForward()">Forward</button>
 
-<div *ngIf="position != null">
-  <span>
-    <span>Tick</span>
-    <input type="number" min="0" [(ngModel)]="position.tick" />
-  </span>
-  <span>
-    <span>Beat</span>
-    <input type="number" min="0" [(ngModel)]="position.beat" />
-  </span>
-  <span>
-    <span>Mesure</span>
-    <input type="number" min="0" [(ngModel)]="position.mesure" />
-  </span>
-</div>
+<app-position *ngIf="position != null" id="sequencer-position" [position]="position"></app-position>
 
 <div>
   <span>Playing:</span>

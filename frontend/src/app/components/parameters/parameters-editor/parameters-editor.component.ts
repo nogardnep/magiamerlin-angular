@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ParameterWrapper } from 'src/app/models/wrapper/ParameterWrapper.model';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Entity } from 'src/app/models/entity/Entity.model';
-import { ParametersModel } from 'src/app/models/Parameter';
+import { ParametersModel, ParameterValue } from 'src/app/models/Parameter';
 
 @Component({
   selector: 'app-parameters-editor',
@@ -10,6 +11,7 @@ import { ParametersModel } from 'src/app/models/Parameter';
 export class ParametersEditorComponent implements OnInit {
   @Input() parametersModel: ParametersModel;
   @Input() entity: Entity;
+  @Output() changed = new EventEmitter<ParameterWrapper>();
 
   constructor() {}
 
@@ -17,5 +19,9 @@ export class ParametersEditorComponent implements OnInit {
 
   getKeys(): string[] {
     return Object.keys(this.parametersModel);
+  }
+
+  onChange(parameterWrapper: ParameterWrapper): void {
+    this.changed.emit(parameterWrapper);
   }
 }

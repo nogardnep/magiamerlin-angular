@@ -21,7 +21,7 @@ export class TrackPresetsManagerService {
 
   loadPreset(preset: TrackPreset): void {
     this.selectionService.getSelectedProject().tracks = preset.tracks;
-    this.audioSamplerService.initTracks(preset.tracks);
+    this.audioSamplerService.initSamplerTracks(preset.tracks);
   }
 
   loadPresets(): Promise<TrackPreset[]> {

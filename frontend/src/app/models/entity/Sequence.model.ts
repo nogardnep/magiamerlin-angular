@@ -1,9 +1,19 @@
+import { ParametersModel } from 'src/app/models/Parameter';
 import { Sheet } from './Sheet.model';
+
+
+
+
+export const sequenceParametersModel: ParametersModel = {
+  bpm: {
+    name: 'BPM',
+    min: 20,
+    max: 500,
+    default: 120,
+  }
+};
 
 export interface Sequence extends Sheet {
   num: number;
-
-  parameters: {
-    bpm: number;
-  };
+  name: string;
 }

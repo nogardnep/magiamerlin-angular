@@ -2,21 +2,21 @@
 <div>
   <span>
     <span>Sequence:</span>
-    <input type="number" [min]="getMin()" [max]="getMax(configuration.sequenceNumber)" [ngModel]="sequenceNum"
+    <input type="number" [min]="getMin()" [max]="getMax(configuration.entities.sequenceNumber)" [ngModel]="sequenceNum"
       (change)="onChangeSequenceNum($event.target.value)" />
   </span>
   <span>
     <span>Pattern</span>
-    <input type="number" [min]="getMin()" [max]="getMax(configuration.patternNumber)" [ngModel]="patternNum"
+    <input type="number" [min]="getMin()" [max]="getMax(configuration.entities.patternNumber)" [ngModel]="patternNum"
       (change)="onChangePatternNum($event.target.value)" />
   </span>
   <span>
     <span>Track</span>
-    <input type="number" [min]="getMin()" [max]="getMax(configuration.trackNumber)" [ngModel]="trackNum" (change)="onChangeTrackNum($event.target.value)" />
+    <input type="number" [min]="getMin()" [max]="getMax(configuration.entities.trackNumber)" [ngModel]="trackNum" (change)="onChangeTrackNum($event.target.value)" />
   </span>
   <span>
     <span>Bank</span>
-    <input type="number" [min]="getMin()" [max]="getMax(configuration.bankNumber)" [ngModel]="bankNum" (change)="onChangeBankNum($event.target.value)" />
+    <input type="number" [min]="getMin()" [max]="getMax(configuration.entities.bankNumber)" [ngModel]="bankNum" (change)="onChangeBankNum($event.target.value)" />
   </span>
 </div>
 <div>

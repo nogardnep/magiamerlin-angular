@@ -35,7 +35,7 @@ const configurationRoutes = require("./routes/configuration.routes");
 
 app.use(apiConfig.apiRoot + "/project", projectRoutes);
 app.use(apiConfig.apiRoot + "/resource", resourceRoutes);
-app.use(apiConfig.apiRoot + "/tracks-preset", tracksPresetRoutes);
+app.use(apiConfig.apiRoot + "/track-preset", tracksPresetRoutes);
 app.use(apiConfig.apiRoot + "/configuration", configurationRoutes);
 
 app.use(function (err: any, req: Request, res: Response, next: NextFunction) {

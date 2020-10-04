@@ -12,14 +12,11 @@ import { TrackComponent } from './components/edition/track/track.component';
 import { IndexPageComponent } from './components/page/index-page/index-page.component';
 import { LoadingComponent } from './components/control/loading/loading.component';
 import { PatternListComponent } from './components/list/pattern-list/pattern-list.component';
-import { PatternBeatComponent } from './components/pattern-sheet/pattern-beat/pattern-beat.component';
-import { PatternMesureComponent } from './components/pattern-sheet/pattern-mesure/pattern-mesure.component';
-import { PatternStepComponent } from './components/pattern-sheet/pattern-step/pattern-step.component';
 import { ProjectLoaderPageComponent } from './components/page/project-loader-page/project-loader-page.component';
 import { ProjectPageComponent } from './components/page/project-page/project-page.component';
 import { ProjectComponent } from './components/edition/project/project.component';
 import { ProjectsControlComponent } from './components/control/projects-control/projects-control.component';
-import { AudioSamplerComponent } from './components/sampler/audio-sampler/audio-sampler.component';
+import { TrackPlayerComponent } from './components/player/track-player/track-player.component';
 import { SequenceListComponent } from './components/list/sequence-list/sequence-list.component';
 import { SequencerComponent } from './components/sequencer/sequencer.component';
 import { TrackListComponent } from './components/list/track-list/track-list.component';
@@ -32,9 +29,8 @@ import { ConfigurationPageComponent } from './components/page/configuration-page
 import { ResourceLoaderComponent } from './components/loader/resource-loader/resource-loader.component';
 import { AudioTrackLoaderComponent } from './components/loader/track-audio-loader/track-audio-loader.component';
 import { FilenamePipe } from './pipes/filename.pipe';
-import { SequencesComponent } from './components/edition/sequences/sequences.component';
-import { SongPartsComponent } from './components/edition/song-parts/song-parts.component';
-import { PatternPlayerComponent } from './components/edition/pattern-player/pattern-player.component';
+import { SongPartPlayerComponent } from './components/player/song-part-player/song-part-player.component';
+import { PatternPlayerComponent } from './components/player/pattern-player/pattern-player.component';
 import { SongPartComponent } from './components/edition/song-part/song-part.component';
 import { TrackAudioComponent } from './components/edition/track-audio/track-audio.component';
 import { TrackVideoComponent } from './components/edition/track-video/track-video.component';
@@ -44,6 +40,12 @@ import { TrackVideoLoaderPageComponent } from './components/page/track-video-loa
 import { ParametersEditorComponent } from './components/parameters/parameters-editor/parameters-editor.component';
 import { ParameterEditorComponent } from './components/parameters/parameter-editor/parameter-editor.component';
 import { ParameterViewerComponent } from './components/parameters/parameter-viewer/parameter-viewer.component';
+import { SequencePlayerComponent } from './components/player/sequence-player/sequence-player.component';
+import { PatternSheetEventComponent } from './components/sheet/pattern-sheet-event/pattern-sheet-event.component';
+import { PatternSheetComponent } from './components/sheet/pattern-sheet/pattern-sheet.component';
+import { PatternPlayerTriggerComponent } from './components/player/pattern-player-trigger/pattern-player-trigger.component';
+import { PositionComponent } from './components/utils/position/position.component';
+import { SpecialActionsControlComponent } from './components/control/special-actions-control/special-actions-control.component';
 
 @NgModule({
   declarations: [
@@ -59,9 +61,6 @@ import { ParameterViewerComponent } from './components/parameters/parameter-view
     SelectionControlComponent,
     SequencerComponent,
     ParameterEditorComponent,
-    PatternMesureComponent,
-    PatternBeatComponent,
-    PatternStepComponent,
     PatternEventComponent,
     ProjectLoaderPageComponent,
     LoadingComponent,
@@ -69,7 +68,7 @@ import { ParameterViewerComponent } from './components/parameters/parameter-view
     ProjectsControlComponent,
     TrackAudioLoaderPageComponent,
     IndexPageComponent,
-    AudioSamplerComponent,
+    TrackPlayerComponent,
     TracksPresetExplorerComponent,
     TracksPresetsControlComponent,
     ConfigurationPageComponent,
@@ -77,8 +76,8 @@ import { ParameterViewerComponent } from './components/parameters/parameter-view
     TrackAudioLoaderPageComponent,
     AudioTrackLoaderComponent,
     FilenamePipe,
-    SequencesComponent,
-    SongPartsComponent,
+    SequencePlayerComponent,
+    SongPartPlayerComponent,
     PatternPlayerComponent,
     SongPartComponent,
     TrackAudioComponent,
@@ -88,6 +87,12 @@ import { ParameterViewerComponent } from './components/parameters/parameter-view
     TrackVideoLoaderPageComponent,
     ParametersEditorComponent,
     ParameterViewerComponent,
+    SequencePlayerComponent,
+    PatternSheetEventComponent,
+    PatternSheetComponent,
+    PatternPlayerTriggerComponent,
+    PositionComponent,
+    SpecialActionsControlComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

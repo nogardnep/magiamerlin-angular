@@ -1,7 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ParameterWrapper } from 'src/app/models/wrapper/ParameterWrapper.model';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Entity } from 'src/app/models/entity/Entity.model';
 import {
   ParameterLabel,
+  Parameters,
   ParametersModel,
   ParameterValue,
 } from 'src/app/models/Parameter';
@@ -12,23 +21,25 @@ type SelectOption = {
   text: string;
 };
 
+// TODO: error when creating new project
+
 @Component({
   selector: 'app-parameter-editor',
   templateUrl: './parameter-editor.component.html',
   styleUrls: ['./parameter-editor.component.scss'],
 })
-export class ParameterEditorComponent implements OnInit {
+export class ParameterEditorComponent implements OnChanges {
   @Input() entity: Entity;
   @Input() key: string;
   @Input() parametersModel: ParametersModel;
-  @Output() changed = new EventEmitter<ParameterValue>();
+  @Output() changed = new EventEmitter<ParameterWrapper>();
   min: number;
   max: number;
   name: string;
 
   constructor(private parametersService: ParametersService) {}
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.parametersService.checkParameter(
       this.entity,
       this.parametersModel,
@@ -40,8 +51,10 @@ export class ParameterEditorComponent implements OnInit {
     this.name = this.parametersModel[this.key].name;
   }
 
-  onChange(value: ParameterValue): void {
-    this.changed.emit(value);
+  onChange(): void {
+    this.changed.emit(
+      new ParameterWrapper(this.entity, this.parametersModel, this.key)
+    );
   }
 
   useSelector(): boolean {

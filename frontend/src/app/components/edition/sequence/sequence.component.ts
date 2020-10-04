@@ -1,4 +1,5 @@
-import { Sequence } from 'src/app/models/entity/Sequence.model';
+import { ParametersModel } from 'src/app/models/Parameter';
+import { Sequence, sequenceParametersModel } from 'src/app/models/entity/Sequence.model';
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
@@ -13,7 +14,7 @@ export class SequenceComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onBPMChange(value: number): void {
-
+  getParametersModel(): ParametersModel {
+    return sequenceParametersModel;
   }
 }

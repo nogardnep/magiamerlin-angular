@@ -2,8 +2,8 @@ import { ConfigMangager } from "./config-manager";
 import { apiConfig } from "../config/api.config";
 
 export class PathManager {
-  static projectDataFileName = "data.json";
-  static presetDataFileName = "data.json";
+  static projectDataFileName = "project.json";
+  static presetDataFileName = "preset.json";
 
   static getGlobalResourcePath(): string {
     return (
@@ -37,15 +37,23 @@ export class PathManager {
     );
   }
 
-  static getPresetDataFilePath(presetName: string) {
+  static getTrackPresetsPath() {
     return (
-      PathManager.getPresetFolderPath(presetName) +
+      ConfigMangager.getUserConfiguration().dataRoot +
+      "/" +
+      apiConfig.trackPresetsPath
+    );
+  }
+
+  static getTrackPresetDataFilePath(presetName: string) {
+    return (
+      PathManager.getTrackPresetFolderPath(presetName) +
       "/" +
       PathManager.presetDataFileName
     );
   }
 
-  static getPresetFolderPath(presetName: string) {
-    return apiConfig.presetsPath + "/" + presetName;
+  static getTrackPresetFolderPath(presetName: string) {
+    return PathManager.getTrackPresetsPath() + "/" + presetName;
   }
 }

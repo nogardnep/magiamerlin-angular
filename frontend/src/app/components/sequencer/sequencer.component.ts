@@ -1,3 +1,4 @@
+import { PositionWrapper } from 'src/app/models/wrapper/PositionWrapper.model';
 import { Subscription } from 'rxjs';
 import { Position } from 'src/app/models/entity/Position.model';
 import { SequencerService } from 'src/app/services/sequencer/sequencer.service';
@@ -18,9 +19,9 @@ export class SequencerComponent implements OnInit, OnDestroy {
   constructor(private sequencerService: SequencerService) {}
 
   ngOnInit(): void {
-    this.positionSubscription = this.sequencerService.positionSubject.subscribe(
-      (position: Position) => {
-        this.position = position;
+    this.positionSubscription = this.sequencerService.positionMarkSubject.subscribe(
+      (positionWrapper: PositionWrapper) => {
+        this.position = positionWrapper.getPosition();
       }
     );
 
@@ -30,8 +31,8 @@ export class SequencerComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.sequencerService.emitPositionSubject();
-    this.sequencerService.emitPlayingSubject();
+    this.sequencerService.emitPositionMark();
+    this.sequencerService.emitPlaying();
   }
 
   ngOnDestroy(): void {
@@ -45,5 +46,17 @@ export class SequencerComponent implements OnInit, OnDestroy {
 
   onClickPause(): void {
     this.sequencerService.pause();
+  }
+
+  onClickStop(): void {
+    this.sequencerService.stop();
+  }
+
+  onClickBackward(): void {
+    this.sequencerService.moveOnStep(true);
+  }
+
+  onClickForward(): void {
+    this.sequencerService.moveOnStep();
   }
 }

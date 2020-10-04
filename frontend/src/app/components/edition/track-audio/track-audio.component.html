@@ -10,4 +10,4 @@
   </figure>
   <button (click)="onClickEmptySound()">Empty sound</button>
 </div>
-<app-parameters-editor [entity]="track.audio" [parametersModel]="getParametersModel()"></app-parameters-editor>
+<app-parameters-editor (changed)="onParameterChanged()" [entity]="track.audio" [parametersModel]="getParametersModel()"></app-parameters-editor>

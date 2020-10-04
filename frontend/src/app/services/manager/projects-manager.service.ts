@@ -1,3 +1,4 @@
+import { configuration } from 'src/app/config/config';
 import { TrackAudio } from 'src/app/models/entity/TrackAudio.model';
 import { TrackVideo } from 'src/app/models/entity/TrackVideo.model';
 import { Injectable } from '@angular/core';
@@ -8,7 +9,6 @@ import { Sequence } from 'src/app/models/entity/Sequence.model';
 import { SongPart } from 'src/app/models/entity/SongPart.model';
 import { TimeSignature } from 'src/app/models/entity/TimeSignature.model';
 import { Track } from 'src/app/models/entity/Track.model';
-import { ConfigurationService } from 'src/app/services/configuration/configuration.service';
 import { SelectionService } from 'src/app/services/control/selection.service';
 import { ProjectsDataService } from 'src/app/services/data/projects-data.service';
 
@@ -19,8 +19,7 @@ export class ProjectsManagerService {
   constructor(
     private router: Router,
     private selectionService: SelectionService,
-    private projectsDataService: ProjectsDataService,
-    private configurationService: ConfigurationService
+    private projectsDataService: ProjectsDataService
   ) {}
 
   loadProject(): void {
@@ -53,16 +52,14 @@ export class ProjectsManagerService {
   private makeNewProject(name: string): Project {
     name = name.replace(' ', '_');
 
-    const firstNum = this.configurationService.getConfigurations().firstNum;
-
     const songParts: SongPart[] = [];
     const sequences: Sequence[] = [];
     const patterns: Pattern[] = [];
     const tracks: Track[] = [];
 
     for (
-      let num = firstNum;
-      num <= this.configurationService.getConfigurations().songPartNumber;
+      let num = configuration.entities.firstNum;
+      num <= configuration.entities.songPartNumber;
       num++
     ) {
       const newSongPart = {
@@ -75,8 +72,8 @@ export class ProjectsManagerService {
     }
 
     for (
-      let num = firstNum;
-      num <= this.configurationService.getConfigurations().sequenceNumber;
+      let num = configuration.entities.firstNum;
+      num <= configuration.entities.sequenceNumber;
       num++
     ) {
       const newSequence = {
@@ -85,20 +82,20 @@ export class ProjectsManagerService {
           step: 4,
           beat: 4,
           mesure: 1,
-        } as TimeSignature
+        } as TimeSignature,
       } as Sequence;
 
       sequences.push(newSequence);
     }
 
     for (
-      let bank = firstNum;
-      bank <= this.configurationService.getConfigurations().bankNumber;
+      let bank = configuration.entities.firstNum;
+      bank <= configuration.entities.bankNumber;
       bank++
     ) {
       for (
-        let num = firstNum;
-        num <= this.configurationService.getConfigurations().patternNumber;
+        let num = configuration.entities.firstNum;
+        num <= configuration.entities.patternNumber;
         num++
       ) {
         const newPattern = {
@@ -117,23 +114,23 @@ export class ProjectsManagerService {
     }
 
     for (
-      let bank = firstNum;
-      bank <= this.configurationService.getConfigurations().bankNumber;
+      let bank = configuration.entities.firstNum;
+      bank <= configuration.entities.bankNumber;
       bank++
     ) {
       for (
-        let num = firstNum;
-        num <= this.configurationService.getConfigurations().trackNumber;
+        let num = configuration.entities.firstNum;
+        num <= configuration.entities.trackNumber;
         num++
       ) {
         const newTrack = {
           num,
           bank,
           audio: {
-            resource: null
+            resource: null,
           } as TrackAudio,
           video: {
-            resource: null
+            resource: null,
           } as TrackVideo,
         } as Track;
 
