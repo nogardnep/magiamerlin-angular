@@ -67,18 +67,16 @@ export class PatternSheetEventComponent
   getButtonText(): string {
     let text = '_';
 
-    // if (this.event !== null) {
-    //   switch (this.event.action) {
-    //     case PatternEventActions.Play:
-    //       text = 'o';
-    //       break;
-    //     case PatternEventActions.Stop:
-    //       text = 'x';
-    //       break;
-    //   }
-    // }
-
-    text = this.position.tick + '-' + this.position.beat;
+    if (this.event !== null) {
+      switch (this.event.action) {
+        case PatternEventActions.Play:
+          text = 'o';
+          break;
+        case PatternEventActions.Stop:
+          text = 'x';
+          break;
+      }
+    }
 
     return text;
   }

@@ -65,7 +65,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.projectsDataService.loadProjects().then((projects: Project[]) => {
       if (projects.length > 0) {
         this.selectionService.selectProject(projects[0]);
-        this.selectionService.selectMode(new ControlMode('TrackPlay'));
+        this.selectionService.selectMode(new ControlMode('PatternEdit'));
       }
     });
   }

@@ -1,46 +1,49 @@
-import { Howl } from 'howler';
-
+import { AudioService } from 'src/app/services/audio/audio.service';
 export type Enveloppe = {
-  attack: number,
-  release: number,
+  attack: number;
+  release: number;
 };
 
 export class SamplerVoice {
-  private lastId: number = null;
-  private lastHowl: Howl = null;
   private playing = false;
   private volume = 1;
+  private buffer: AudioBuffer = null;
+  private lastSource: AudioBufferSourceNode = null;
 
-  constructor(private  src: string, private enveloppe: Enveloppe) {
+  constructor(
+    private audioService: AudioService,
+    private src: string,
+    private enveloppe: Enveloppe
+  ) {
+    this.audioService.load(src, (buffer: AudioBuffer) => {
+      this.buffer = buffer;
+    });
   }
 
   play(): void {
+    console.log('PLAy');
     this.stop();
     this.playing = true;
 
-    const newHowl = new Howl({
-      volume: 1,
-      src: [this.src],
-      onend: () => {
-        this.playing = false;
-      },
-    });
-
-    this.lastId = newHowl.play();
-    newHowl.fade(0, this.volume, this.enveloppe.attack, this.lastId);
-
-    this.lastHowl = newHowl;
+    if (this.buffer !== null) {
+      this.lastSource = this.audioService.getSourceFor(this.buffer);
+      this.lastSource.start();
+    }
   }
 
   stop(): void {
-    this.playing = false;
-
-    if (this.lastId !== null) {
-      this.lastHowl.fade(this.volume, 0, this.enveloppe.release, this.lastId);
+    if (this.lastSource !== null) {
+      this.lastSource.stop();
     }
+
+    this.playing = false;
   }
 
   isPlaying(): boolean {
     return this.playing;
+  }
+
+  setVolume(volume: number): void {
+    this.volume = volume;
   }
 }

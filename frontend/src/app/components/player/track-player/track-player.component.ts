@@ -11,7 +11,6 @@ import { AudioSamplerService } from 'src/app/services/sampler/audio-sampler.serv
 export class TrackPlayerComponent implements OnInit {
   @Input() tracks: Track[];
 
-
   constructor(
     private audioSamplerService: AudioSamplerService,
     private selectionService: SelectionService
@@ -20,7 +19,7 @@ export class TrackPlayerComponent implements OnInit {
   ngOnInit(): void {}
 
   onClickTrack(track: Track): void {
-      this.audioSamplerService.playSamplerTrack(track.num);
+    this.audioSamplerService.playSamplerTrack(track.num, track.bank);
   }
 
   getTracks(): Track[] {

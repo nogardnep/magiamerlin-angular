@@ -1,14 +1,14 @@
 export const configuration = {
   entities: {
     firstNum: 1,
-    trackNumber: 2,
-    patternNumber: 2,
-    sequenceNumber: 2,
-    bankNumber: 2,
-    songPartNumber: 2,
+    trackNumber: 16,
+    patternNumber: 16,
+    sequenceNumber: 16,
+    bankNumber: 4,
+    songPartNumber: 16,
   },
   sequencer: {
-    tickNumber: 12,
+    ticksByBeat: 12,
   },
   timeSignature: {
     step: {

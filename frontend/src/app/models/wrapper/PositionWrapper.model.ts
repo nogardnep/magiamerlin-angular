@@ -20,20 +20,20 @@ export class PositionWrapper {
   }
 
   onBeat(): boolean {
-    return this.position.tick === 0;
+    return this.position.tick === 0 && this.onTick();
   }
 
   onMesure(): boolean {
-    return this.position.beat === 0;
+    return this.position.beat === 0 && this.onBeat();
   }
 
   onTurn(): boolean {
-    return this.position.mesure === 0;
+    return this.position.mesure === 0 && this.onMesure();
   }
 
   onEnd(): boolean {
     return (
-      this.position.tick >= configuration.sequencer.tickNumber - 1 &&
+      this.position.tick >= configuration.sequencer.ticksByBeat - 1 &&
       this.position.beat >= this.timeSignature.beat - 1 &&
       this.position.mesure >= this.timeSignature.mesure - 1
     );
@@ -45,9 +45,9 @@ export class PositionWrapper {
     this.position.tick += progression.tick;
 
     if (this.position.tick < 0) {
-      this.position.tick = configuration.sequencer.tickNumber - 1;
+      this.position.tick = configuration.sequencer.ticksByBeat - 1;
       this.position.beat--;
-    } else if (this.position.tick === configuration.sequencer.tickNumber) {
+    } else if (this.position.tick === configuration.sequencer.ticksByBeat) {
       this.position.tick = 0;
       this.position.beat++;
     }

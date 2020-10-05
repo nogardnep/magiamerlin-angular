@@ -1,8 +1,10 @@
+import { MetronomeService } from 'src/app/services/sequencer/metronome.service';
 import { ParametersService } from 'src/app/services/parameters/parameters.service';
 import { SelectionService } from 'src/app/services/control/selection.service';
+import { Metronome } from 'node-metronome';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import { Metronome } from 'src/app/models/system/sequencer/Metronome.model';
+import { Observable, Subject } from 'rxjs';
+import { Timer } from 'src/app/models/system/sequencer/Timer.model';
 import {
   PatternEventActions,
   PatternEvent,
@@ -21,6 +23,7 @@ import {
   patternParametersModel,
   TriggerMode,
 } from 'src/app/models/entity/Pattern.model';
+import * as io from 'socket.io-client';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +31,8 @@ import {
 export class SequencerService {
   private positionMark: PositionWrapper;
   private playing: boolean;
-  private metronome: Metronome;
+  private timer: Timer;
+  private socket;
 
   positionMarkSubject: Subject<PositionWrapper> = new Subject<
     PositionWrapper
@@ -39,18 +43,25 @@ export class SequencerService {
     private audioSamplerService: AudioSamplerService,
     private patternsService: PatternsService,
     private selectionService: SelectionService,
-    private parametersService: ParametersService
+    private parametersService: ParametersService,
+    private metronomeService: MetronomeService
   ) {
-    this.metronome = new Metronome(100, () => {
-      this.move(
-        {
-          tick: 1,
-        } as Position,
-        true
-      );
+    this.metronomeService.loadSounds();
+
+    this.timer = new Timer(120, () => {
+      this.onTick();
     });
 
     this.initPositionMark();
+  }
+
+  private onTick(): void {
+    this.move(
+      {
+        tick: 1,
+      } as Position,
+      false
+    );
   }
 
   emitPositionMark(): void {
@@ -79,8 +90,16 @@ export class SequencerService {
     this.emitPositionMark();
   }
 
-  move(progression: Position, playEvents): void {
-    this.movePatterns(progression, playEvents);
+  move(progression: Position, silently: boolean): void {
+    if (this.positionMark.onMesure()) {
+      console.log('mesure');
+      this.metronomeService.playMesureSound();
+    } else if (this.positionMark.onBeat()) {
+      console.log('beat');
+      this.metronomeService.playBeatSound();
+    }
+
+    this.movePatterns(progression, silently);
     this.positionMark.move(progression);
     this.emitPositionMark();
   }
@@ -100,12 +119,12 @@ export class SequencerService {
 
     this.setPlaying(true);
     this.emitPlaying();
-    this.metronome.start();
+    this.timer.start();
   }
 
   pause(): void {
     this.setPlaying(false);
-    this.metronome.stop();
+    this.timer.stop();
   }
 
   stop(): void {
@@ -130,69 +149,76 @@ export class SequencerService {
     let moveOn = true;
 
     while (moveOn) {
-      this.move({ tick: progression } as Position, false);
+      this.move({ tick: progression } as Position, true);
       if (this.positionMark.getPosition().tick === 0) {
         moveOn = false;
       }
     }
   }
 
-  private movePatterns(progression: Position, playEvents): void {
+  private movePatterns(progression: Position, silently: boolean): void {
     this.patternsService
       .getPatternWrappers()
       .forEach((patternWrapper: PatternWrapper) => {
         if (patternWrapper.isPlaying()) {
+          if (!silently) {
+            this.playEvents(patternWrapper);
+          }
+
           patternWrapper.move(progression);
-
-          if (playEvents) {
-            patternWrapper
-              .getPattern()
-              .events.forEach((event: PatternEvent) => {
-                if (
-                  patternWrapper
-                    .getPositionWrapper()
-                    .isSameAs(event.position) &&
-                  event.action === PatternEventActions.Play
-                ) {
-                  this.audioSamplerService.playSamplerTrack(event.trackNum);
-                }
-              });
-          }
         }
 
-        let trigger = false;
-
-        const triggerMode: TriggerMode = this.parametersService.getParameter(
-          patternWrapper.getPattern(),
-          patternParametersModel,
-          'triggerMode'
-        );
-
-        switch (triggerMode) {
-          case TriggerMode.OnTick:
-            if (this.positionMark.onTick()) {
-              trigger = true;
-            }
-            break;
-          case TriggerMode.OnBeat:
-            if (this.positionMark.onBeat()) {
-              trigger = true;
-            }
-            break;
-          case TriggerMode.OnMesure:
-            if (this.positionMark.onMesure()) {
-              trigger = true;
-            }
-            break;
-        }
-
-        if (trigger) {
-          if (patternWrapper.isArmedForStopping()) {
-            patternWrapper.stop();
-          } else if (patternWrapper.isArmedForPlaying()) {
-            patternWrapper.launch();
-          }
-        }
+        this.checkTriggers(patternWrapper);
       });
+  }
+
+  private playEvents(patternWrapper: PatternWrapper): void {
+    patternWrapper.getPattern().events.forEach((event: PatternEvent) => {
+      if (
+        patternWrapper.getPositionWrapper().isSameAs(event.position) &&
+        event.action === PatternEventActions.Play
+      ) {
+        this.audioSamplerService.playSamplerTrack(
+          event.trackNum,
+          event.bankNum
+        );
+      }
+    });
+  }
+
+  private checkTriggers(patternWrapper: PatternWrapper): void {
+    let trigger = false;
+
+    const triggerMode: TriggerMode = this.parametersService.getParameter(
+      patternWrapper.getPattern(),
+      patternParametersModel,
+      'triggerMode'
+    );
+
+    switch (triggerMode) {
+      case TriggerMode.OnTick:
+        if (this.positionMark.onTick()) {
+          trigger = true;
+        }
+        break;
+      case TriggerMode.OnBeat:
+        if (this.positionMark.onBeat()) {
+          trigger = true;
+        }
+        break;
+      case TriggerMode.OnMesure:
+        if (this.positionMark.onMesure()) {
+          trigger = true;
+        }
+        break;
+    }
+
+    if (trigger) {
+      if (patternWrapper.isArmedForStopping()) {
+        patternWrapper.stop();
+      } else if (patternWrapper.isArmedForPlaying()) {
+        patternWrapper.launch();
+      }
+    }
   }
 }

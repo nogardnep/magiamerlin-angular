@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/lodash": "^4.14.161",
+    "@types/socket.io": "^2.1.11",
     "body-parser": "^1.19.0",
     "connect-multiparty": "^2.2.0",
     "cors": "^2.8.5",
@@ -21,7 +22,9 @@
     "glob": "^7.1.6",
     "mongoose": "^5.10.6",
     "multer": "^1.4.2",
+    "node-metronome": "0.0.12",
     "recursive-readdir": "^2.2.2",
+    "socket.io": "^2.3.0",
     "util": "^0.12.3"
   },
   "devDependencies": {

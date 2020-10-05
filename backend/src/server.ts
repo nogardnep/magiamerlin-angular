@@ -1,11 +1,30 @@
 import { NextFunction, Request, Response } from "express";
 import { apiConfig } from "./config/api.config";
+import { Metronome } from "node-metronome";
 const express = require("express");
+const socketIO = require("socket.io");
 
 const bodyParser = require("body-parser");
 var path = require("path");
 
 const app = express();
+const http = require("http").createServer(app);
+const io = socketIO(http);
+
+// TODO: type
+io.on("connection", (socket: any) => {
+  console.log("user connected");
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+});
+
+const port = process.env.PORT || 3000;
+
+http.listen(port, () => {
+  console.log(`started on port: ${port}`);
+});
 
 app.use(bodyParser.json({ limit: "50mb" }));
 // app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,7 +38,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   // TODO: choose
   //res.header("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
-  res.setHeader("Access-Control-Allow-Credentials", 'true');
+  res.setHeader("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
   res.header(
     "Access-Control-Allow-Headers",

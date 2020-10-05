@@ -45,6 +45,6 @@ export class PatternSheetComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getTickNumber(): number {
-    return configuration.sequencer.tickNumber;
+    return configuration.sequencer.ticksByBeat;
   }
 }

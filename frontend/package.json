@@ -31,6 +31,7 @@
     "@angular/platform-browser-dynamic": "~10.0.3",
     "@angular/router": "~10.0.3",
     "@ng-toolkit/universal": "^1.1.21",
+    "@types/socket.io-client": "^1.4.34",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.5.2",
     "electron-packager": "^15.1.0",
@@ -38,7 +39,9 @@
     "howler": "^2.2.0",
     "ng2-file-upload": "^1.4.0",
     "ngx-toastr": "^13.0.0",
+    "node-metronome": "0.0.12",
     "rxjs": "~6.5.5",
+    "socket.io-client": "^2.3.1",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"
   },
