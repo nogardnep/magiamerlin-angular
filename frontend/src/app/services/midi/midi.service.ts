@@ -4,14 +4,14 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class MidiService {
-  midi: MIDIAccess;
-  inputs: [];
-  outputs: [];
+  midi: any;
+  inputs: any[];
+  outputs: any[];
 
   constructor() {}
 
   connect(callback: () => void): void {
-    navigator.requestMIDIAccess().then(
+    navigator['requestMIDIAccess']().then(
       (midi) => {
         midi.addEventListener('statechange', (event) =>
           this.initDevices(event.target, callback)
@@ -35,7 +35,7 @@ export class MidiService {
       input && !input.done;
       input = inputsIterator.next()
     ) {
-      this.inputs.push(input.value);
+      this.inputs.push(input['value']);
     }
 
     const outputsIterator = midi.outputs.values();

@@ -42,8 +42,7 @@ export class SequencerService {
     private selectionService: SelectionService,
     private parametersService: ParametersService,
     private metronomeService: MetronomeService,
-    private audioService: AudioService,
-    private midiService: MidiService
+    private audioService: AudioService
   ) {
     this.metronomeService.loadSounds();
 
