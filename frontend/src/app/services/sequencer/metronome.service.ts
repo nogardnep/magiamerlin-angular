@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 export class MetronomeService {
   beatSoundBuffer: AudioBuffer; // TODO
   mesureSoundBuffer: AudioBuffer; // TODO
-  muted = true;
+  muted = false;
 
   constructor(private audioService: AudioService) {}
 

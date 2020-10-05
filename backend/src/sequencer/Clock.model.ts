@@ -1,9 +1,9 @@
 export class Clock {
-  private expected: number;
-  private timeout: number;
+  private expected!: number;
+  private timeout!: NodeJS.Timeout;
   private delay: number;
 
-  constructor(private timeInterval, private callback: () => void) {
+  constructor(private timeInterval: number, private callback: () => void) {
     this.delay = 10;
   }
 

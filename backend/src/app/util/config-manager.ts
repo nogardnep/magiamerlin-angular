@@ -5,7 +5,7 @@ export type UserConfiguration = {
 };
 
 export class ConfigMangager {
-  static userConfigPath = "src/config/user-config.json";
+  static userConfigPath = "src/app/config/user-config.json"; // TODO: put somewhere else? 
   static userConfiguration: UserConfiguration;
 
   static getUserConfiguration(): UserConfiguration {

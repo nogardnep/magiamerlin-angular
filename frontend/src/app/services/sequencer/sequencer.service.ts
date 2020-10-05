@@ -52,6 +52,7 @@ export class SequencerService {
     });
 
     // this.clock.start();
+    // TODO: crashes
 
     this.initPositionMark();
   }
