@@ -1,29 +1,26 @@
-import { MetronomeService } from 'src/app/services/sequencer/metronome.service';
-import { ParametersService } from 'src/app/services/parameters/parameters.service';
-import { SelectionService } from 'src/app/services/control/selection.service';
-import { Metronome } from 'node-metronome';
+import { MidiService } from './../midi/midi.service';
+import { Clock } from 'src/app/models/system/sequencer/Clock.model';
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { Timer } from 'src/app/models/system/sequencer/Timer.model';
-import {
-  PatternEventActions,
-  PatternEvent,
-} from 'src/app/models/entity/PatternEvent.model';
-import { Position } from 'src/app/models/entity/Position.model';
-import { PatternWrapper } from 'src/app/models/wrapper/PatternWrapper.model';
-import { PatternsService } from 'src/app/services/sequencer/patterns.service';
-import { TimeSignature } from 'src/app/models/entity/TimeSignature.model';
-import { PositionWrapper } from 'src/app/models/wrapper/PositionWrapper.model';
-import { AudioSamplerService } from 'src/app/services/sampler/audio-sampler.service';
-import {
-  ControlMode,
-  ControlModeEnum,
-} from 'src/app/models/system/control/ControlMode.model';
+import { Subject } from 'rxjs';
 import {
   patternParametersModel,
   TriggerMode,
 } from 'src/app/models/entity/Pattern.model';
-import * as io from 'socket.io-client';
+import {
+  PatternEvent,
+  PatternEventActions,
+} from 'src/app/models/entity/PatternEvent.model';
+import { Position } from 'src/app/models/entity/Position.model';
+import { TimeSignature } from 'src/app/models/entity/TimeSignature.model';
+import { ControlModeEnum } from 'src/app/models/system/control/ControlMode.model';
+import { PatternWrapper } from 'src/app/models/wrapper/PatternWrapper.model';
+import { PositionWrapper } from 'src/app/models/wrapper/PositionWrapper.model';
+import { AudioService } from 'src/app/services/audio/audio.service';
+import { SelectionService } from 'src/app/services/control/selection.service';
+import { ParametersService } from 'src/app/services/parameters/parameters.service';
+import { AudioSamplerService } from 'src/app/services/sampler/audio-sampler.service';
+import { MetronomeService } from 'src/app/services/sequencer/metronome.service';
+import { PatternsService } from 'src/app/services/sequencer/patterns.service';
 
 @Injectable({
   providedIn: 'root',
@@ -31,8 +28,8 @@ import * as io from 'socket.io-client';
 export class SequencerService {
   private positionMark: PositionWrapper;
   private playing: boolean;
-  private timer: Timer;
   private socket;
+  private clock: Clock;
 
   positionMarkSubject: Subject<PositionWrapper> = new Subject<
     PositionWrapper
@@ -44,13 +41,18 @@ export class SequencerService {
     private patternsService: PatternsService,
     private selectionService: SelectionService,
     private parametersService: ParametersService,
-    private metronomeService: MetronomeService
+    private metronomeService: MetronomeService,
+    private audioService: AudioService,
+    private midiService: MidiService
   ) {
     this.metronomeService.loadSounds();
 
-    this.timer = new Timer(120, () => {
+    this.clock = new Clock(100, () => {
+      console.log('tick');
       this.onTick();
     });
+
+    // this.clock.start();
 
     this.initPositionMark();
   }
@@ -58,7 +60,7 @@ export class SequencerService {
   private onTick(): void {
     this.move(
       {
-        tick: 1,
+        tick: 3,
       } as Position,
       false
     );
@@ -119,12 +121,12 @@ export class SequencerService {
 
     this.setPlaying(true);
     this.emitPlaying();
-    this.timer.start();
+    this.clock.start();
   }
 
   pause(): void {
     this.setPlaying(false);
-    this.timer.stop();
+    this.clock.stop();
   }
 
   stop(): void {

@@ -14,16 +14,13 @@
     <span><strong>{{ mesureIndex }}.</strong></span>
     <span *ngFor="let beat of ' '.repeat(pattern.timeSignature.beat).split(''), let beatIndex = index">
       {{ beatIndex }}
-      <span *ngFor="let tick of ' '.repeat(getTickNumber()).split(''), let stepIndex = index">
-        <app-pattern-sheet-event [pattern]="pattern" [track]="track"
-          [position]="{ mesure: mesureIndex, beat: beatIndex, tick: stepIndex }">
+      <span *ngFor="let tick of ' '.repeat(getTicksByBeat()).split(''), let tickIndex = index">
+        <app-pattern-sheet-event *ngIf="displayEvent(tickIndex)" [pattern]="pattern" [track]="track"
+          [position]="{ mesure: mesureIndex, beat: beatIndex, tick: tickIndex }">
         </app-pattern-sheet-event>
       </span>
     </span>
   </div>
-  <span *ngFor="let step of ' '.repeat(pattern.timeSignature.step).split(''), let stepIndex = index">
-  </span>
-
   <div *ngIf="selectedEvent !== null">
     selected event
     <!-- <app-pattern-event [event]="selectedEvent"></app-pattern-event> -->

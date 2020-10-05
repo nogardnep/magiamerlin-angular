@@ -30,12 +30,28 @@ export class MetronomeService {
   playBeatSound(): void {
     if (!this.muted) {
       this.audioService.play(this.beatSoundBuffer);
+      // this.playNote();
     }
   }
 
   playMesureSound(): void {
     if (!this.muted) {
+      // this.playNote();
       this.audioService.play(this.mesureSoundBuffer);
     }
+  }
+
+  private playNote(): void {
+    const context = this.audioService.getAudioContext();
+    const oscillator = context.createOscillator();
+    oscillator.frequency.value = 200;
+
+    oscillator.connect(context.destination);
+
+    oscillator.start(0);
+
+    setTimeout(() => {
+      oscillator.stop();
+    }, 100);
   }
 }

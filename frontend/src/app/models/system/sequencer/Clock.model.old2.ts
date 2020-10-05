@@ -1,7 +1,7 @@
 import { configuration } from 'src/app/config/config';
-export class Timer {
+export class Clock {
   audioContext = null;
-  lookahead = 25; // How frequently to call scheduling function (in milliseconds)
+  lookahead = 1; // How frequently to call scheduling function (in milliseconds)
   scheduleAheadTime = 0.1; // How far ahead to schedule audio (sec)
   nextNoteTime = 0.0; // when the next note is due
   isRunning = false;
@@ -13,7 +13,7 @@ export class Timer {
 
   nextNote(): void {
     const secondsPerBeat =
-      60.0 / this.tempo / configuration.sequencer.ticksByBeat;
+      60.0 / this.tempo / 4 /* configuration.sequencer.ticksByBeat*/;
     this.nextNoteTime += secondsPerBeat;
   }
 

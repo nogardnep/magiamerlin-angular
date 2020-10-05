@@ -1,5 +1,5 @@
 import { SamplerVoice } from 'src/app/models/system/audio/SamplerVoice.model';
-export class Timer {
+export class Clock {
   private interval: number;
   private timer: any; // TODO
   private counter: number;

@@ -15,6 +15,10 @@ const io = socketIO(http);
 io.on("connection", (socket: any) => {
   console.log("user connected");
 
+  socket.on("test", () => {
+    console.log("test");
+  });
+
   socket.on("disconnect", () => {
     console.log("user disconnected");
   });

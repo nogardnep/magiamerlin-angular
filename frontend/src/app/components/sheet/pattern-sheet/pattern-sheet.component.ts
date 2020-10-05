@@ -44,7 +44,21 @@ export class PatternSheetComponent implements OnInit, OnChanges, OnDestroy {
     this.selectedTrackSubscription.unsubscribe();
   }
 
-  getTickNumber(): number {
+  getTicksByBeat(): number {
     return configuration.sequencer.ticksByBeat;
+  }
+
+  displayEvent(tick: number): boolean {
+    // TODO: ugly
+    let modulo: number;
+
+    if (this.pattern.timeSignature.step === 3) {
+      modulo = 4;
+    } else if (this.pattern.timeSignature.step === 4) {
+      modulo = 3;
+    } else {
+      modulo = 1;
+    }
+    return tick % modulo === 0;
   }
 }

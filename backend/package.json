@@ -22,6 +22,7 @@
     "glob": "^7.1.6",
     "mongoose": "^5.10.6",
     "multer": "^1.4.2",
+    "node-gyp": "^7.1.0",
     "node-metronome": "0.0.12",
     "recursive-readdir": "^2.2.2",
     "socket.io": "^2.3.0",
