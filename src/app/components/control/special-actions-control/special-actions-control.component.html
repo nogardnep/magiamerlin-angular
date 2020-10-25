@@ -1,0 +1,12 @@
+<div>
+  <span>
+    <label for="loop">Loop</label>
+    <input id="loop" type="checkbox" [ngModel]="looping" (ngModelChange)="onChangeLooping($event)" />
+  </span>
+  <span>
+    <label for="edit">Edit</label>
+    <input id="edit" type="checkbox" [ngModel]="editing" (ngModelChange)="onChangeEditing($event)" />
+  </span>
+</div>
+
+<button (click)="onClickTest()">Test</button>
